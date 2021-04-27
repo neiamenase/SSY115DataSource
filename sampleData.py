@@ -10,6 +10,7 @@ import argparse
 import logging
 import pandas as pd
 import string
+from datetime import datetime
 
 consumer_key= 'LmP576VoAnb2ghC6P4cWPVdLB'
 consumer_secret= 'ceqovoyQX1hg3jFNdv38t5BevMeyNQgKtKS85WpzyoQrKIWfDp'
@@ -51,7 +52,7 @@ def searchTwitter(args):
     
     num_tweet = int(args.tweet)
     search_word = str(args.keyword)
-    date_since = str(args.date)
+    date_since = str(args.since)
     country = str(args.country)
     lang = str(args.lang)
     
@@ -75,7 +76,8 @@ def searchTwitter(args):
         logging.info("csv file not accessible, now create a new one")
         with open("TweetData.csv", 'w', newline='') as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow(["country", "search_word", "createDate", "language", "text"])
+            writer.writerow(["source", "country", "search_word", "createDate", 
+                             "language", "text"])
     
     
     logging.info("reading csv file and remove duplicate started...")
@@ -85,8 +87,6 @@ def searchTwitter(args):
     rows = []    
     tweets_saved = []
     df = pd.read_csv("TweetData.csv")
-    
-    
     
     is_same_kayword =  df['search_word'] == search_word
     filtered_df = df[is_same_kayword]
@@ -117,13 +117,18 @@ def searchTwitter(args):
         # try:
         if not (filtered_df.text.str.contains(text).any()) and not any(text in s for s in tweets_saved):
             tweets_saved.append(text)
-            row = [country, search_word.replace(' ', '') ,tweet.created_at, lang, text]
+            d = datetime.fromisoformat(str(tweet.created_at))
+            row = ["Twitter", country, search_word.replace(' ', '') ,
+                   str(d.year) + "-" + str(d.month) + "-" + str(d.day),
+                   lang, text
+                   ]
             rows.append(row)
         i += 1
         # except Exception:
         #     logging.info(text)
     
     logging.info("reading csv file and remove completed")
+    print("total tweet: ", i)
     
     logging.info("writing to csv file process started...")
     
@@ -136,11 +141,11 @@ def searchTwitter(args):
     logging.info("program completed. The result has been stored as: " + "TweetData.csv")
 
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Search tweet from twitter and save to csv file.',
-        epilog = 'Example: sampleData.py -v -t 100 -k practo -d 2020-01-27'
+        epilog = 'Example: sampleData.py -v -t 100 -k practo -s 2020-01-27 -l en -c India'
+        # ' -u 2021-04-01'
     )
     parser.add_argument('--tweet', '-t',
                         default='100',
@@ -152,9 +157,12 @@ if __name__ == "__main__":
     parser.add_argument('--verbose', '-v',
                         action='store_true',
                         help='Whether to print verbose diagnostic output')
-    parser.add_argument('--date', '-d',
+    parser.add_argument('--since', '-s',
                         type = str,
                         help='date_since of the tweet format:(yyyy-mm-dd)')
+    # parser.add_argument('--until', '-u',
+    #                     type = str,
+    #                     help='date_until of the tweet format:(yyyy-mm-dd)')
     parser.add_argument('--country', '-c',
                         type = str,
                         help='country description the keyword')
