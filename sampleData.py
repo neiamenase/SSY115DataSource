@@ -118,7 +118,7 @@ def searchTwitter(args):
         if not (filtered_df.text.str.contains(text).any()) and not any(text in s for s in tweets_saved):
             tweets_saved.append(text)
             d = datetime.fromisoformat(str(tweet.created_at))
-            row = ["Twitter", country, search_word.replace(' ', '') ,
+            row = ["Twitter", country, search_word.replace(' ', '').replace('#','') ,
                    str(d.year) + "-" + str(d.month) + "-" + str(d.day),
                    lang, text
                    ]
@@ -128,7 +128,7 @@ def searchTwitter(args):
         #     logging.info(text)
     
     logging.info("reading csv file and remove completed")
-    print("total tweet: ", i)
+    print("total tweet: ", i-1 if i>0 else 0)
     
     logging.info("writing to csv file process started...")
     
