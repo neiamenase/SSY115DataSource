@@ -13,11 +13,12 @@ from collections import OrderedDict
 import csv
 from datetime import datetime
 
-country = "India"
-keyword = "practo"
+country = "Sweden"
+keyword = "doktor24"
 since = "2020-01-27"
-language = 'en'
-url = 'https://itunes.apple.com/in/rss/customerreviews/page=1/id=953772015/sortby=mostrecent/xml?urlDesc=/customerreviews/id=953772015/xml'
+enableSince = True
+language = 'sv'
+url = 'https://itunes.apple.com/se/rss/customerreviews/page=1/id=1249339459/sortby=mostrecent/xml?urlDesc=/customerreviews/page=1/id=1249339459/sortby=mostrecent/xml'
 done = False
 
 while(not done):
@@ -48,8 +49,11 @@ while(not done):
                 str(d.year) + "-" + str(d.month) + "-" + str(d.day),
                 language, content[0]['#text']
                 ]
-        s = datetime.fromisoformat(since)
-        if (d > s):
+        if enableSince:
+            s = datetime.fromisoformat(since)
+            if (d > s):
+                rows.append(row)
+        else:
             rows.append(row)
     if done: # no content in the page
         print("end of the page (no content)...")

@@ -59,6 +59,11 @@ def searchTwitter(args):
     logging.info("Program started...")
     logging.info("tweets sampling started...")
     
+    # print("search_word:", search_word)
+    # print("lang:", lang)
+    # print("since:", date_since)
+    # print("num_tweet:", num_tweet)
+    
     tweets = tw.Cursor(api.search,
                   q=search_word,
                   lang=lang,
@@ -79,7 +84,11 @@ def searchTwitter(args):
             writer.writerow(["source", "country", "search_word", "createDate", 
                              "language", "text"])
     
+    sum_ = 0
+    for t in tweets:
+        sum_+=1
     
+    print("size collected (before filter): ", sum_)
     logging.info("reading csv file and remove duplicate started...")
     
     
@@ -128,7 +137,7 @@ def searchTwitter(args):
         #     logging.info(text)
     
     logging.info("reading csv file and remove completed")
-    print("total tweet: ", i-1 if i>0 else 0)
+    print("total tweet after filtered: ", i-1 if i>0 else 0)
     
     logging.info("writing to csv file process started...")
     
