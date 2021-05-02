@@ -84,13 +84,14 @@ def searchTwitter(args):
             writer.writerow(["source", "country", "search_word", "createDate", 
                              "language", "text"])
     
-    sum_ = 0
-    for t in tweets:
-        sum_+=1
+    # sum_ = 0
+    # for t in tweets:
+    #     sum_+=1
     
-    print("size collected (before filter): ", sum_)
+    
+    # print("size collected (before filter): ", sum_)
     logging.info("reading csv file and remove duplicate started...")
-    
+
     
     # with open("TweetData_" + date_since + "_" + search_word + "_" + str(num_tweet)+".csv", 'w', newline='') as csvfile:
     rows = []    
@@ -99,7 +100,6 @@ def searchTwitter(args):
     
     is_same_kayword =  df['search_word'] == search_word
     filtered_df = df[is_same_kayword]
-    
     i = 1
     p = [True] * 5
     for tweet in tweets:

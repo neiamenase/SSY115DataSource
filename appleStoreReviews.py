@@ -14,11 +14,11 @@ import csv
 from datetime import datetime
 
 country = "Sweden"
-keyword = "doktor24"
+keyword = "kry"
 since = "2020-01-27"
 enableSince = True
 language = 'sv'
-url = 'https://itunes.apple.com/se/rss/customerreviews/page=1/id=1249339459/sortby=mostrecent/xml?urlDesc=/customerreviews/page=1/id=1249339459/sortby=mostrecent/xml'
+url = 'https://itunes.apple.com/se/rss/customerreviews/page=1/id=968052278/sortby=mostrecent/xml?urlDesc=/customerreviews/page=1/id=968052278/sortby=mostrecent/xml'
 done = False
 
 while(not done):
@@ -37,7 +37,7 @@ while(not done):
             url = link['@href']
             print("next url:", url)
     if done: # no content in the page
-        print("end of the page (no next page)...")
+        print("end of the page  (no next page)...")
         break
     for entry in root_elements:
         i +=1
